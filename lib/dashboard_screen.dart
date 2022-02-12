@@ -12,7 +12,7 @@ class DashboardScreen extends StatelessWidget {
         slivers: [
           SliverList(
             delegate: SliverChildListDelegate(
-              [Text('Dashboard Screen')],
+              [Text('Featured Articles of the week')],
             ),
           ),
         ],

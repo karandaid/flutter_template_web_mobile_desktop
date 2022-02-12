@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:karandeepsingh/apps_screen.dart';
 import 'package:karandeepsingh/dashboard_screen.dart';
 import 'package:karandeepsingh/footer_screen.dart';
 import 'package:karandeepsingh/ideas_screen.dart';
+import 'package:karandeepsingh/legal/articlewriting.dart';
+import 'package:karandeepsingh/legal/cookie.dart';
+import 'package:karandeepsingh/legal/privacy.dart';
 import 'package:karandeepsingh/startup_screen.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'LoginScreen.dart';
 import 'automation_screen.dart';
+import 'legal/datadeletion.dart';
+import 'legal/terms.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,9 +39,32 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.blue,
           textTheme: TextTheme(bodyText2: TextStyle(color: Colors.black))),
-      home: ResponsiveSizer(builder: (context, orientation, screenType) {
-        return const MyHomePage(title: 'Karandeep Singh');
-      }),
+      home: ResponsiveSizer(
+        builder: (context, orientation, screenType) {
+          return const MyHomePage(title: 'Karandeep Singh');
+        },
+      ),
+      routes: {
+        // When navigating to the "/second" route, build the SecondScreen widget.
+        PrivacyScreen.routeName: (context) => const PrivacyScreen(),
+        TermsScreen.routeName: (context) => const TermsScreen(),
+        CookieScreen.routeName: (context) => const CookieScreen(),
+        DataDeletionScreen.routeName: (context) => const DataDeletionScreen(),
+        ArticleWriting.routeName: (context) => const ArticleWriting(),
+      },
+      onGenerateRoute: (RouteSettings settings) {
+        var uri = Uri.parse('${settings.name}');
+        print('uri = $uri');
+        if (settings.arguments != null) {
+          final map = settings.arguments as Map<String, dynamic>;
+          return MaterialPageRoute(
+            builder: (_) => DocRead(
+              map: map,
+            ),
+            settings: RouteSettings(name: '${settings.name}'),
+          );
+        }
+      },
     );
   }
 }
@@ -64,8 +93,8 @@ class My_HomePageState extends State<MyHomePage> {
       ),
       body: CustomScrollView(slivers: [
         SliverAppBar(
-          backgroundColor: Colors.red,
-          expandedHeight: 400,
+          backgroundColor: Colors.blue,
+          expandedHeight: 200,
           pinned: true,
           leading: Device.boxConstraints.maxWidth < 800
               ? Builder(
@@ -80,10 +109,10 @@ class My_HomePageState extends State<MyHomePage> {
                 )
               : Container(),
           flexibleSpace: FlexibleSpaceBar(
-            background: Image.asset(
-              'images/background.jpg',
-              fit: BoxFit.cover,
-            ),
+            // background: Image.asset(
+            //   'images/background.jpg',
+            //   fit: BoxFit.cover,
+            // ),
             title: Text(
               widget.title,
               style: TextStyle(
@@ -152,9 +181,36 @@ class My_HomePageState extends State<MyHomePage> {
                                     icon: Icons.android,
                                     text: 'Automation',
                                   ),
+                                  _buildMenuItem(
+                                    widget: const AutomationScreen(),
+                                    icon: Icons.message,
+                                    text: 'Message Me',
+                                  ),
                                   const Divider(),
-                                  const AboutListTile(
+                                  AboutListTile(
                                     applicationName: 'Me',
+                                    child: const Text('Learn about me'),
+                                    aboutBoxChildren: [
+                                      IconButton(
+                                        onPressed: () {
+                                          print('a');
+                                        },
+                                        icon: const FaIcon(
+                                          FontAwesomeIcons.linkedin,
+                                          color: Colors.blue,
+                                        ),
+                                      ),
+                                      TextButton.icon(
+                                        onPressed: () {
+                                          print('a');
+                                        },
+                                        icon: const FaIcon(
+                                          FontAwesomeIcons.certificate,
+                                          color: Colors.blue,
+                                        ),
+                                        label: const Text('My Certifications'),
+                                      )
+                                    ],
                                   ),
                                 ],
                               ),
